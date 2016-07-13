@@ -7,7 +7,7 @@ import java.util.*;
  * Created by zplchn on 6/9/16.
  */
 public class Jun16 {
-
+    //1
     public int[] twoSum(int[] nums, int target) {
         int[] res = {-1, -1};
         if (nums.length < 2) {
@@ -26,6 +26,7 @@ public class Jun16 {
         return res;
     }
 
+    //2
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
         if (l1 == null) {
@@ -51,6 +52,7 @@ public class Jun16 {
 
     }
 
+    //3
     public int lengthOfLongestSubstring(String s) {
         if (s == null || s.length() == 0) {
             return 0;
@@ -73,20 +75,8 @@ public class Jun16 {
 
     }
 
-    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
 
-
-    }
-
-    public String longestPalindrome(String s) {
-
-
-    }
-
-    public String convert(String s, int numRows) {
-
-    }
-
+    //4
     public int reverse(int x) {
 
         long res = 0;
@@ -103,6 +93,7 @@ public class Jun16 {
     }
 
     /***
+     * 5
      * space, overflow return MAX/MIN instantly, non-digit stop,
      * @param str
      * @return
@@ -137,6 +128,7 @@ public class Jun16 {
         return (int)(isNeg ? -res : res);
     }
 
+    //6
     public boolean isPalindrome(int x) {
         if (x < 0) {
             return false;
@@ -155,10 +147,9 @@ public class Jun16 {
         return true;
     }
 
-    public boolean isMatch(String s, String p) {
 
-    }
 
+    //7
     public int maxArea(int[] height) {
         if (height.length < 2)
             return 0;
@@ -173,14 +164,7 @@ public class Jun16 {
         return max;
     }
 
-    public String intToRoman(int num) {
-
-    }
-
-    public int romanToInt(String s) {
-
-    }
-
+    //8
     public String longestCommonPrefix(String[] strs) {
         if (strs.length == 0)
             return "";
@@ -198,6 +182,7 @@ public class Jun16 {
 
     }
 
+    //9
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         if (nums.length < 3)
@@ -230,6 +215,7 @@ public class Jun16 {
 
     }
 
+    //10
     public int threeSumClosest(int[] nums, int target) {
         if (nums.length < 3){
             return Integer.MIN_VALUE;
@@ -260,10 +246,9 @@ public class Jun16 {
 
     }
 
-    public List<String> letterCombinations(String digits) {
 
-    }
 
+    //11
     public List<List<Integer>> fourSum(int[] nums, int target) {
         List<List<Integer>> res = new ArrayList<>();
         if (nums.length < 4)
@@ -298,6 +283,7 @@ public class Jun16 {
         return res;
     }
 
+    //12
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Deque<TreeNode> stack = new ArrayDeque<>();
@@ -316,6 +302,7 @@ public class Jun16 {
         return res;
     }
 
+    //13
     public int maxDepth(TreeNode root) {
         if (root == null)
             return 0;
@@ -323,6 +310,7 @@ public class Jun16 {
 
     }
 
+    //14
     public TreeNode invertTree(TreeNode root) {
         if (root == null)
             return null;
@@ -332,6 +320,7 @@ public class Jun16 {
         return root;
     }
 
+    //15
     public boolean isSameTree(TreeNode p, TreeNode q) {
         if (p == null)
             return q == null;
@@ -341,6 +330,7 @@ public class Jun16 {
 
     }
 
+    //16
     public boolean isBalanced(TreeNode root) {
         return getHeight(root) != -1;
     }
@@ -357,24 +347,36 @@ public class Jun16 {
         return Math.abs(l - r) <= 1 ? Math.max(l, r) + 1 : -1;
     }
 
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    //17
+    public TreeNode lowestCommonAncestorBST(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null || p == null || q == null)
             return null;
         if (p.val < root.val && q.val < root.val){
-            return lowestCommonAncestor(root.left, p, q);
+            return lowestCommonAncestorBST(root.left, p, q);
         }
         else if (p.val > root.val && q.val > root.val){
-            return lowestCommonAncestor(root.right, p, q);
+            return lowestCommonAncestorBST(root.right, p, q);
         }
         else
             return root;
     }
 
-    public int numTrees(int n) {
-
-
+    //18
+    public TreeNode lowestCommonAncestorBT(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || p == null || q == null)
+            return null;
+        if (root == p || root == q)
+            return root;
+        TreeNode l = lowestCommonAncestorBT(root.left, p, q);
+        TreeNode r = lowestCommonAncestorBT(root.right, p, q);
+        if (l != null && r != null)
+            return root;
+        return l!= null ? l : r;
     }
 
+
+
+    //19
     public boolean isSymmetric(TreeNode root) {
         if (root == null)
             return true;
@@ -390,16 +392,34 @@ public class Jun16 {
         return l.val == r.val && isSym(l.left, r.right) && isSym(l.right, r.left);
     }
 
-    public boolean hasPathSum(TreeNode root, int sum) {
-        if (root == null)
-            return false;
-        if (root.left == null && root.right == null)
-            return root.val == sum;
-        return hasPathSum(root.left, sum - root.val)
-                || hasPathSum(root.right, sum - root.val);
+    //20
+    public boolean isValid(String s) {
+        if (s == null || s.length() == 0)
+            return true;
+        Deque<Character> stack = new ArrayDeque<>();
+        String left = "([{", right = ")}]";
 
+        for (int i = 0; i < s.length(); ++i){
+            char c = s.charAt(i);
+            if (left.indexOf(c) >= 0){
+                stack.addFirst(c);
+            }
+            else if (right.indexOf(c) >= 0){
+                if (stack.isEmpty())
+                    return false;
+                char r = stack.removeFirst();
+
+                if ((c == ')' && r != '(')
+                    || (c == '}' && r != '{')
+                    || (c == ']' && r != '['))
+                    return false;
+            }
+        }
+        return stack.isEmpty();
     }
 
+
+    //21
     public int maxPathSum(TreeNode root) {
         dfs(root);
         return this.maxSum;
@@ -416,6 +436,7 @@ public class Jun16 {
         return root.val + Math.max(l, r);
     }
 
+    //22
     public void connect(TreeLinkNode root) {
         if (root == null)
             return;
@@ -428,37 +449,27 @@ public class Jun16 {
 
     }
 
-    public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (root ==null)
-            return res;
-        Deque<TreeNode> queue = new ArrayDeque<>();
-        List<Integer> lvl = new ArrayList<>();
-        queue.addLast(root);
-        int cur = 1, next = 0;
-        while (!queue.isEmpty()) {
-            TreeNode tn = queue.removeFirst();
-            lvl.add(tn.val);
-
-            if (tn.left != null) {
-                queue.addLast(tn.left);
-                ++next;
-            }
-            if (tn.right != null) {
-                queue.addLast(tn.right);
-                ++next;
-            }
-            if (--cur == 0){
-                res.add(lvl);
-                lvl = new ArrayList<>();
-                cur = next;
-                next = 0;
-            }
-
+    //23
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0)
+            return null;
+        ListNode dummy = new ListNode(0), cur = dummy;
+        Queue<ListNode> queue = new PriorityQueue<>((ListNode l1, ListNode l2) -> l1.val - l2.val);
+        for (ListNode ln : lists){
+            if (ln != null)
+                queue.offer(ln);
         }
-        return res;
+        while (!queue.isEmpty()){
+            cur.next = queue.poll();
+            cur = cur.next;
+            if (cur.next != null)
+                queue.offer(cur.next);
+        }
+        cur.next = null;
+        return dummy.next;
     }
 
+    //24
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
         if (root == null)
@@ -489,6 +500,7 @@ public class Jun16 {
         return res;
     }
 
+    //25
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
         if (root == null)
@@ -522,6 +534,512 @@ public class Jun16 {
             }
         }
         return res;
+    }
+
+    //26
+    public boolean isValidBST(TreeNode root) {
+        return isValidBSTHelper(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    private boolean isValidBSTHelper(TreeNode root, long min, long max){
+        if (root == null)
+            return true;
+        if (root.val <= min || root.val >= max)
+            return false;
+        return isValidBSTHelper(root.left, min, root.val) && isValidBSTHelper(root.right, root.val,max);
+    }
+
+    //27
+    public int minDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        if (root.left == null)
+            return minDepth(root.right) + 1;
+        if (root.right == null)
+            return minDepth(root.left) + 1;
+        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+
+    }
+
+
+    //28
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+
+        while (root != null || !stack.isEmpty()){
+            root = root == null ? stack.removeFirst() : root;
+            res.add(root.val);
+            if (root.right != null)
+                stack.addFirst(root.right);
+            root = root.left;
+
+        }
+        return res;
+    }
+
+    //29
+    public int maxPoints(Point[] points) {
+        if (points.length == 0)
+            return 0;
+        int max = 1;
+        for (int i = 0; i < points.length; ++i){
+            Point a = points[i];
+            int dup = 0;
+            Map<Double, Integer> hm = new HashMap<>();
+            for (int j = i+1; j < points.length; ++j){
+                Point b = points[j];
+                //dup
+                if (a.x == b.x && a.y == b.y)
+                    ++dup;
+                else if (a.x == b.x){
+                    hm.put(Double.MAX_VALUE, hm.containsKey(Double.MAX_VALUE) ? hm.get(Double.MAX_VALUE) + 1 : 2);
+                }
+                else if (a.y == b.y) {
+                    hm.put(0.0, hm.containsKey(0.0) ? hm.get(0.0) + 1 : 2); //java's double 0 is imprecise, close to 0
+                }
+                else {
+                    double slope = (double)(a.y - b.y)/(a.x - b.x);
+                    hm.put(slope, hm.containsKey(slope)? hm.get(slope) + 1 : 2);
+                }
+            }
+            int localMax = 1;
+            for (int k : hm.values()){
+                localMax = Math.max(localMax, k);
+            }
+            max = Math.max(max, localMax + dup);
+
+        }
+        return max;
+    }
+
+    //30
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> hs = new HashSet<>(nums.length);
+        //the trick for this problem is to set the initial capacity
+        //so there is no repetative reallocate and copy happens to larget input with no duplicate
+        for (int i : nums){
+            if (hs.contains(i))
+                return true;
+            hs.add(i);
+        }
+        return false;
+    }
+
+    //31
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums.length == 0)
+            return null;
+        return sortedArrayToBSTHelper(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBSTHelper(int[] nums, int l, int r){
+        if (l > r)
+            return null;
+        int m = l + ((r - l) >> 1);
+        TreeNode root = new TreeNode(nums[m]);
+        root.left = sortedArrayToBSTHelper(nums, l, m - 1);
+        root.right = sortedArrayToBSTHelper(nums, m + 1, r);
+        return root;
+    }
+
+    //32
+    private TreeNode pre;
+    public void flatten(TreeNode root) {
+        if (root == null)
+            return;
+
+        if (pre != null){
+            pre.right = root;
+            pre.left = null;
+        }
+        pre = root;
+        TreeNode r = root.right;//before we went into left child, we must preserve right child cuz left will try to modify right when muldify pre at the left child's level, and when bounce back to root, the right already lost
+        flatten(root.left);
+        flatten(r);
+
+
+    }
+
+    //33
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length == 0 || inorder.length == 0 || preorder.length != inorder.length)
+            return null;
+        Map<Integer, Integer> hm = new HashMap<>();
+        for (int i = 0; i < inorder.length; ++i){
+            hm.put(inorder[i], i);
+        }
+        return buildTreeHelper(hm, preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTreeHelper(Map<Integer, Integer> hm, int[] pre, int pl, int pr, int[] in, int il, int ir){
+        if (pl > pr)
+            return null;
+        TreeNode root = new TreeNode(pre[pl]);
+        int m = hm.get(pre[pl]);
+        root.left = buildTreeHelper(hm, pre, pl + 1, pl + m - il, in, il, m - 1);
+        root.right = buildTreeHelper(hm, pre, pl + m - il +1, pr, in, m + 1, ir);
+        return root;
+    }
+
+    //34
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        binaryTreePathsHelper(root, "", res);
+        return res;
+    }
+
+    private void binaryTreePathsHelper(TreeNode root, String pre, List<String> res){
+        if (root == null)
+            return;
+        String path = pre.length() == 0 ? pre + root.val : pre + "->" + root.val;
+        if (root.left == null && root.right == null) {
+            res.add(path);
+            return;
+        }
+        binaryTreePathsHelper(root.left, path, res);
+        binaryTreePathsHelper(root.right, path, res);
+
+    }
+
+    //35
+    public int countNodes(TreeNode root) {
+        //complete bt total#=2^h - 1
+
+        if (root == null)
+            return 0;
+        int left = countNodesHelper(root.left, true);
+        int right =countNodesHelper(root.right, false);
+        if (left == right)
+            return (2 << left) -1;
+        return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+
+    private int countNodesHelper(TreeNode root, boolean isLeft){
+        if (root == null)
+            return 0;
+        int count =0;
+        while (root!= null){
+            count++;
+            root = isLeft? root.left : root.right;
+        }
+        return count;
+    }
+
+    //36
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null)
+            return res;
+        pathSumHelper(root, sum, res, new ArrayList<Integer>());
+        return res;
+    }
+
+    private void pathSumHelper(TreeNode root, int sum, List<List<Integer>> res, List<Integer> path){
+        if (root == null)
+            return;
+        path.add(root.val);
+        if (root.left == null && root.right == null && sum == root.val){
+            res.add(new ArrayList<Integer>(path));
+            return;
+        }
+        pathSumHelper(root.left, sum - root.val, res, path);
+        pathSumHelper(root.right, sum - root.val, res, path);
+        path.remove(path.size() -1);
+    }
+
+    //37
+    private int closetV;
+    private double delta = Double.MAX_VALUE;
+    public int closestValue(TreeNode root, double target) {
+        if (root == null)
+            return Integer.MIN_VALUE;
+        closetValueHelper(root, target);
+        return closetV;
+    }
+
+    private void closetValueHelper(TreeNode root, double target) {
+        if (root == null)
+            return;
+        double dl= Math.abs(target - root.val);
+        if (dl < delta){
+            delta = dl;
+            this.closetV = root.val;
+        }
+        if (target > root.val){
+            closetValueHelper(root.right, target);
+        }
+        else
+            closestValue(root.left, target);
+    }
+
+    //38
+
+
+
+    //39
+
+
+    //40
+
+    //41
+
+    //42
+
+    //43
+
+    //44
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null)
+            return false;
+        if (root.left == null && root.right == null)
+            return root.val == sum;
+        return hasPathSum(root.left, sum - root.val)
+                || hasPathSum(root.right, sum - root.val);
+
+    }
+
+    //45
+    //46
+    //47
+    //48
+    //49
+    //50
+    //51
+    //52
+    //53
+    //54
+    //55
+    //56
+    //57
+    //58
+    //59
+    //60
+
+    /*
+    public List<String> letterCombinations(String digits) {
+
+    }
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+
+    }
+
+    public String longestPalindrome(String s) {
+
+
+    }
+
+    public String convert(String s, int numRows) {
+
+    }
+
+    public String intToRoman(int num) {
+
+    }
+
+    public int romanToInt(String s) {
+
+    }
+
+    public boolean isMatch(String s, String p) {
+
+    }
+    public int numTrees(int n) {
+
+
+    }
+    /*public TreeNode upsideDownBinaryTree(TreeNode root) {
+        if (root == null)
+            return null;
+        while (root.left != null){
+            root.left.left = root.right;
+            TreeNode t = root.left;
+            root.left.right = root;
+
+            root = t;
+        }
+
+    }*/
+    /*private TreeNode successor;
+    private boolean isFound;
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        if (root == null || p == null)
+            return null;
+        inorderTraversalHelper(root, p);
+        return this.successor;
+    }
+
+    private void inorderTraversalHelper(TreeNode root, TreeNode p){
+        if (root == null)
+            return;
+        if (isFound){
+            this.successor = root;
+            isFound = !isFound;
+            return;
+        }
+        inorderTraversalHelper(root.left, p);
+        if (root.val == p.val){
+            isFound = true;
+        }
+        inorderTraversalHelper(root.right, p);
+    }*/
+
+
+    //61
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root ==null)
+            return res;
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        List<Integer> lvl = new ArrayList<>();
+        queue.addLast(root);
+        int cur = 1, next = 0;
+        while (!queue.isEmpty()) {
+            TreeNode tn = queue.removeFirst();
+            lvl.add(tn.val);
+
+            if (tn.left != null) {
+                queue.addLast(tn.left);
+                ++next;
+            }
+            if (tn.right != null) {
+                queue.addLast(tn.right);
+                ++next;
+            }
+            if (--cur == 0){
+                res.add(lvl);
+                lvl = new ArrayList<>();
+                cur = next;
+                next = 0;
+            }
+
+        }
+        return res;
+    }
+
+    //62
+    //63
+    //64
+    //65
+    //66
+    //67
+    //68
+    //69
+    //70
+    //71
+    //72
+    //73
+    public void setZeroes(int[][] matrix) {
+
+    }
+    //74
+    //75
+    //76
+    //77
+    //78
+    //79
+    //80
+    //81
+    //82
+    //83
+    //84
+    //85
+    //86
+    //87
+    //88
+    //89
+    //90
+    //91
+    //92
+    //93
+    //94
+    //95
+    //96
+    //97
+    //98
+    //99
+    //100
+    //101
+    //102
+    //103
+    //104
+    //105
+    //106
+    //107
+    //108
+    //109
+    //110
+
+
+
+
+
+
+
+
+
+    //169
+    public int majorityElement(int[] nums) {
+        if (nums.length == 0)
+            return Integer.MIN_VALUE;
+        int major = nums[0], cnt = 1;
+
+        for (int i = 1; i < nums.length; ++i){
+            if (nums[i] == major)
+                ++cnt;
+            else if(--cnt == 0){
+                major = nums[i];
+                cnt = 1;
+            }
+        }
+        return major;
+    }
+
+    //215
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length < k)
+            return Integer.MIN_VALUE;
+        Queue<Integer> queue = new PriorityQueue<>(k);
+        for (int i : nums){
+            if (queue.size() < k || i >= queue.peek())
+                queue.offer(i);
+        }
+        return queue.poll();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static void main(String[] args){
+        Jun16 j16 = new Jun16();
+
+        TreeNode r = new TreeNode(1);
+        r.left = new TreeNode(2);
+        r.left.right = new TreeNode(5);
+        r.right = new TreeNode(3);
+
+//        j16.flatten(r);
+//        j16.preBT(r);
+        System.out.println(j16.binaryTreePaths(r));
+    }
+
+    private void preBT(TreeNode r){
+        if (r == null)
+            return;
+        System.out.println(r.val);
+        preBT(r.left);
+        preBT(r.right);
     }
 
 
