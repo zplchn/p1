@@ -166,6 +166,35 @@ public class BFS {
 
     }
 
+    //199
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null)
+            return res;
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        int cur = 1, next = 0;
+        queue.offer(root);
+
+        while (!queue.isEmpty()){
+            TreeNode tn = queue.poll();
+            //--cur;
+            if (tn.left != null){
+                queue.offer(tn.left);
+                ++next;
+            }
+            if (tn.right != null){
+                queue.offer(tn.right);
+                ++next;
+            }
+            if (cur-- == 1){
+                res.add(tn.val);
+                cur = next;
+                next = 0;
+            }
+        }
+        return res;
+    }
+
     //200
     private int num = 0;
     public int numIslands(char[][] grid) {

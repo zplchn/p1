@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Created by zplchn on 7/10/16.
  */
@@ -30,6 +32,35 @@ public class Maths {
         return true;
     }
 
+    //43
+    public String multiply(String num1, String num2) {
+        if (num1 == null || num1.length() == 0 || num2 == null || num2.length() == 0 )
+            return "";
+        if (num1.equals("0") || num2.equals("0"))
+            return "0";
+        StringBuilder s1 = new StringBuilder(num1).reverse();
+        StringBuilder s2 = new StringBuilder(num2).reverse();
+        StringBuilder res = new StringBuilder();
+        int[] m = new int[s1.length() + s2.length()];
+
+        for (int i = 0; i < s1.length(); ++i)
+            for (int j = 0; j < s2.length(); ++j)
+                m[i+j] += (s1.charAt(i) - '0') * (s2.charAt(j) - '0'); //here is += cuz one slot could be hit multiple times
+
+        int carry = 0, i = 0;
+        while (i < m.length || carry != 0){
+            m[i] += carry;
+            res.append(m[i] % 10);
+            carry = m[i] / 10;
+            ++i;
+        }
+        res = res.reverse();
+        if (res.charAt(0) == '0')
+            res.deleteCharAt(0); //when no carry
+        return res.toString();
+
+    }
+
     //66
     public int[] plusOne(int[] digits) {
         if (digits == null || digits.length == 0)
@@ -47,6 +78,61 @@ public class Maths {
         return res;
     }
 
+    //89
+    public List<Integer> grayCode(int n) {
+        List<Integer> res = new ArrayList<>();
+        if (n < 0) //graycode 0 is 0
+            return res;
+        for (int i = 0; i < (1 << n); ++i){
+            res.add(i ^ (i >> 1)); //xor i>>1
+        }
+        return res;
+    }
+
+    //121
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2)
+            return 0;
+
+        int max = 0, min = prices[0];//max is 0 meaning no transaction
+        for (int i = 1; i < prices.length; ++i){
+            max = Math.max(max, prices[i] - min);
+            min = Math.min(min, prices[i]);
+        }
+        return max;
+    }
+
+    //150
+    public int evalRPN(String[] tokens) {
+        if (tokens == null || tokens.length == 0)
+            return 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (String s : tokens){
+            if ("+-*/".contains(s)){
+                int b = stack.pop(); //note b first and then a
+                int a = stack.pop();
+                switch(s){
+                    case "+":
+                        stack.push(a + b);
+                        break;
+                    case "-":
+                        stack.push(a - b);
+                        break;
+                    case "*":
+                        stack.push(a * b);
+                        break;
+                    case "/":
+                        stack.push(a / b);
+                        break;
+                }
+            }
+            else
+                stack.push(Integer.parseInt(s));
+        }
+        return stack.pop();
+    }
+
     //168
     public String convertToTitle(int n) {
         if (n <= 0)
@@ -60,14 +146,6 @@ public class Maths {
         return sb.toString();
     }
 
-
-
-
-
-
-
-
-
     //171
     public int titleToNumber(String s) {
         if (s == null || s.length() == 0)
@@ -79,6 +157,45 @@ public class Maths {
         }
         return res;
     }
+
+    //172
+    public int trailingZeroes(int n) {
+        int res = 0;
+        while (n >= 5){
+            res += n / 5;
+            n /= 5;
+        }
+        return res;
+    }
+
+    //202
+    public boolean isHappy(int n) {
+        if (n <= 0)
+            return false;
+        Set<Integer> hs = new HashSet<>();
+
+        while(n != 1){
+            if (hs.contains(n))
+                return false;
+            hs.add(n); //must add before test
+            int sum = 0;
+            while (n != 0){
+                int t = n % 10;
+                n /= 10;
+                sum += t * t;
+            }
+            n = sum;
+        }
+        return true;
+    }
+
+    public static void main(String[] args){
+        Maths m = new Maths();
+        boolean b = m.isHappy(7);
+        System.out.println(b);
+    }
+
+
 
 
 

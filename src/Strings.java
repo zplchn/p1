@@ -1,5 +1,7 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 /**
  * Created by zplchn on 7/9/16.
@@ -74,6 +76,44 @@ public class Strings {
         return stack.isEmpty();
     }
 
+    //38
+    public String countAndSay(int n) {
+        if (n < 1)
+            return "";
+        StringBuilder res = new StringBuilder("1");
+        StringBuilder t = new StringBuilder();
+        int i = 1, j = 1, cnt = 1;
+
+        while (i < n){
+            j = cnt = 1;
+            while (j < res.length()){
+                if (res.charAt(j) == res.charAt(j-1))
+                    ++cnt;
+                else {
+                    t.append(cnt);
+                    t.append(res.charAt(j-1));
+                    cnt = 1;
+                }
+                ++j;//dont forget
+            }
+            t.append(cnt);
+            t.append(res.charAt(j-1));
+            res = t;
+            t = new StringBuilder();
+            ++i; //dont forget
+        }
+        return res.toString();
+    }
+
+    //58
+    public int lengthOfLastWord(String s) {
+        if (s == null)
+            return 0;
+        String[] tokens = s.split("\\s");
+        return tokens.length == 0 ? 0 : tokens[tokens.length - 1].length();
+    }
+
+
     //67
     public String addBinary(String a, String b) {
         if (a == null)
@@ -92,6 +132,34 @@ public class Strings {
 
     }
 
+    //71
+    public String simplifyPath(String path) {
+        if (path == null || path.length() == 0)
+            return path;
+        Deque<String> deque = new ArrayDeque<>();
+        String res = "";
+
+        String[] tokens = path.split("/");
+        for (String str : tokens){
+            if (str.isEmpty()  || str.equals(".")) //dont use == to compare string
+                continue;
+            else if (str.equals("..")){
+                if (!deque.isEmpty())
+                    deque.pop();
+            }
+            else {
+                deque.push(str);
+            }
+        }
+        if (deque.isEmpty())
+            return "/";
+        while (!deque.isEmpty()){
+            res += ("/" + deque.pollLast()); //deque when use as stack alsays push/pop at head. Need to pollLast() when queue
+        }
+        return res;
+    }
+
+
     //125
     public boolean isPalindrome(String s) {
         if (s == null)
@@ -109,12 +177,56 @@ public class Strings {
         return true;
     }
 
+    //165
+    public int compareVersion(String version1, String version2) {
+        if (version1 == null || version2 == null)
+            return -2;
+        String[] v1 = version1.split("\\."); //split uses regex and . need escape \\
+        String[] v2 = version2.split("\\.");
+
+        for (int i = 0; i < Math.max(v1.length, v2.length); ++i){
+            int gap = (i < v1.length? Integer.parseInt(v1[i]) : 0) - (i < v2.length? Integer.parseInt(v2[i]) : 0);
+            if (gap != 0)
+                return gap > 0 ? 1 : 0;
+        }
+        return 0;
+    }
+
+    //293
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> res = new ArrayList<>();
+        if (s == null || s.length() == 0)
+            return res;
+        StringBuilder sb = new StringBuilder(s);
+        for (int i = 0; i < sb.length() - 1; ++i){
+            if (sb.charAt(i) == '+' && sb.charAt(i+1) == '+'){
+                sb.replace(i, i+1, "--");
+                res.add(sb.toString());
+                sb.replace(i, i+1, "++");
+            }
+        }
+        return res;
+
+    }
+
+    //344
+    public String reverseString(String s) {
+        if (s == null)
+            return s;
+        return new StringBuilder(s).reverse().toString();
+
+    }
 
 
 
 
 
 
+
+    public static void main(String[] args){
+        Strings s = new Strings();
+        s.compareVersion("1", "0");
+    }
 
 
 

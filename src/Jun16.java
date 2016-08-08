@@ -580,35 +580,29 @@ public class Jun16 {
 
     //29
     public int maxPoints(Point[] points) {
-        if (points.length == 0)
+        if (points == null || points.length == 0)
             return 0;
-        int max = 1;
-        for (int i = 0; i < points.length; ++i){
-            Point a = points[i];
-            int dup = 0;
-            Map<Double, Integer> hm = new HashMap<>();
-            for (int j = i+1; j < points.length; ++j){
-                Point b = points[j];
-                //dup
-                if (a.x == b.x && a.y == b.y)
-                    ++dup;
-                else if (a.x == b.x){
-                    hm.put(Double.MAX_VALUE, hm.containsKey(Double.MAX_VALUE) ? hm.get(Double.MAX_VALUE) + 1 : 2);
-                }
-                else if (a.y == b.y) {
-                    hm.put(0.0, hm.containsKey(0.0) ? hm.get(0.0) + 1 : 2); //java's double 0 is imprecise, close to 0
-                }
-                else {
-                    double slope = (double)(a.y - b.y)/(a.x - b.x);
-                    hm.put(slope, hm.containsKey(slope)? hm.get(slope) + 1 : 2);
-                }
-            }
-            int localMax = 1;
-            for (int k : hm.values()){
-                localMax = Math.max(localMax, k);
-            }
-            max = Math.max(max, localMax + dup);
+        int max = 1; //at least 1 point being itself
 
+        for (int i = 0; i < points.length; ++i){
+            Map<Double, Integer> hm = new HashMap<>();
+            int same = 0;
+            for (int j = i+1; j < points.length; ++j){ //no need to compare previous nodes again as they have been calculated
+                if (points[i].x == points[j].x && points[i].y == points[j].y)
+                    ++same;
+                else if (points[i].x == points[j].x)
+                    hm.put(Double.MAX_VALUE, hm.containsKey(Double.MAX_VALUE) ? hm.get(Double.MAX_VALUE) + 1 : 2);//initial = 2
+                else if (points[i].y == points[j].y) //+0.0 -0.0
+                    hm.put(0.0, hm.containsKey(0.0) ? hm.get(0.0) + 1 : 2);
+                else {
+                    double z = (double)(points[j].y - points[i].y) / (points[j].x - points[i].x); //here must cast to double
+                    hm.put(z, hm.containsKey(z) ? hm.get(z) + 1 : 2);
+                }
+            }
+            int localMax = 1; //self
+            for (int k : hm.values())
+                localMax = Math.max(localMax, k);
+            max = Math.max(max, localMax + same);
         }
         return max;
     }

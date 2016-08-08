@@ -1,3 +1,7 @@
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Random;
+
 /**
  * Created by zplchn on 7/4/16.
  */
@@ -23,6 +27,28 @@ public class LinkedList {
         }
         cur.next = null;
         return dummy.next;
+    }
+
+    //19
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null || n <= 0)
+            return head;
+        ListNode dummy = new ListNode(0), left, right;
+        dummy.next = head;
+        left = right = dummy;
+        while (n > 0 && right != null){
+            right = right.next;
+            --n;
+        }
+        if (right == null)
+            return head;
+        while (right.next != null){
+            right = right.next;
+            left = left.next;
+        }
+        left.next = left.next.next;
+        return dummy.next;
+
     }
 
     //21
@@ -52,7 +78,139 @@ public class LinkedList {
         return dummy.next;
     }
 
+    //23
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0)
+            return null;
+        Queue<ListNode> pq = new PriorityQueue<>((ln1, ln2) -> ln1.val - ln2.val);
+        for (ListNode ln : lists)
+            if (ln != null)
+                pq.offer(ln);
+        ListNode dummy = new ListNode(0);
+        ListNode cur = dummy;
+        while (!pq.isEmpty()){
+            ListNode ln = pq.poll();
+            cur.next = ln;
+            cur = cur.next;
+            if (ln.next != null)
+                pq.offer(ln.next);
+        }
+        cur.next = null;
+        return dummy.next;
+    }
+
+    //24
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode dummy = new ListNode(0);
+        ListNode pre = dummy, cur = head;
+
+        while (cur != null && cur.next != null){
+            ListNode next = cur.next.next;
+            pre.next = cur.next;
+            cur.next.next = cur;
+            pre = cur;
+            cur = next;
+        }
+        pre.next = cur;
+        return dummy.next;
+    }
+
+    //82
+    public ListNode deleteDuplicatesDeleteDupItself(ListNode head) {
+        if(head == null)
+            return head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode l = head, r, cur = dummy;
+        while (cur != null && cur.next != null){
+            r = l.next;
+            while (r != null && r.val == l.val)
+                r = r.next;
+            if (r == l.next){
+                cur =cur.next;
+            }
+            l = r;
+            cur.next = l;
+        }
+        return dummy.next;
+    }
+
+    //83
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null)
+            return head;
+        ListNode w = head, r = head.next, dummy = new ListNode(0);
+        dummy.next = head;
+        while (r != null){
+            if (w.val != r.val){
+                w.next = r;
+                w = w.next;
+            }
+            r = r.next;
+        }
+        w.next = null; //this must be set to end the final list
+        return dummy.next;
+    }
+
+    //86
+    public ListNode partition(ListNode head, int x) {
+        if (head == null)
+            return head;
+        ListNode smallHead = new ListNode(0), bigHead = new ListNode(0);
+        ListNode cur = head, sm = smallHead, bg = bigHead;
+        while (cur != null){
+            if (cur.val < x){
+                sm.next = cur;
+                sm = sm.next;
+            }
+            else {
+                bg.next = cur;
+                bg = bg.next;
+            }
+            cur = cur.next;
+        }
+        if (smallHead.next == null)
+            return bigHead.next;
+        sm.next = bigHead.next;
+        bg.next = null; // like 2,1 and given 2, need to end the big part
+        return smallHead.next;
+    }
+
     //138
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if (head == null)
+            return head;
+
+        //copy and make it like 1-1'-2-2'
+        RandomListNode cur = head;
+        while (cur != null){
+            RandomListNode t = cur.next;
+            cur.next = new RandomListNode(cur.label);
+            cur.next.next = t;
+            cur = t;
+        }
+        cur = head;
+        //back to head and then link random
+        while (cur != null){
+            cur.next.random = cur.random != null ? cur.random.next : cur.random;
+            cur = cur.next.next;
+        }
+
+        //seperate into two ll
+        RandomListNode dummy = new RandomListNode(0);
+        RandomListNode pre = dummy;
+        cur = head;
+
+        while (cur != null){
+            pre.next = cur.next;
+            pre = pre.next;
+            cur.next = cur.next.next;
+            cur = cur.next;
+        }
+        return dummy.next;
+    }
 
     //141
     public boolean hasCycle(ListNode head) {
@@ -94,6 +252,39 @@ public class LinkedList {
             fast = fast.next;
         }
         return slow;
+    }
+
+    //143
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null)
+            return;
+
+        //1. find mid point
+        ListNode fast, slow;
+        fast = slow = head;
+        while (fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        //slow.next = null; here should not se the slow's next to null cuz then cannot go on the second half
+        //2. reverse the second part
+        ListNode pre = null, cur = slow;
+        while (cur != null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        //3. interleaving
+        cur = head;
+        while (cur != slow){ // remember
+            ListNode t = cur.next, s = pre.next;
+            cur.next = pre;
+            pre.next = t;
+            cur = t;
+            pre = s;
+        }
+        cur.next = null; // when 1-2. need to do this again. the 2 point to itself
     }
 
 
@@ -167,12 +358,51 @@ public class LinkedList {
 
     }
 
+    //234
+    public boolean isPalindrome(ListNode head) {
+        if (head == null)
+            return true; // null treats as palindrome
+        //1. find mid point
+        ListNode slow, fast;
+        slow = fast = head;
+        while (fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode pre = null, cur = slow;
+        //2. reverse
+        while (cur != null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        //3. compare
+        cur = head;
+        while (cur != slow){
+            if (pre.val != cur.val)
+                return false;
+            pre = pre.next;
+            cur = cur.next;
+        }
+        return true;
+
+    }
+
     //237
     public void deleteNode(ListNode node) {
         if (node == null)
             return;
         node.val = node.next.val;
         node.next = node.next.next;
+    }
+
+    public static void main(String[] args){
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+
+        LinkedList ll = new LinkedList();
+        ll.reorderList(head);
     }
 
 
