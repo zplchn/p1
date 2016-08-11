@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,6 +66,20 @@ public class DP {
         return grid[grid.length - 1][grid[0].length - 1];
     }
 
+    //70
+    public int climbStairs(int n) {
+        if (n < 0)
+            return 0;
+        int[] dp = new int[2];
+        dp[0] = dp[1] = 1;
+        for (int i = 2; i <= n; ++i){
+            int t = dp[1];
+            dp[1] += dp[0];
+            dp[0] = t;
+        }
+        return dp[1];
+    }
+
     //120
     public int minimumTotal(List<List<Integer>> triangle) {
         if (triangle == null || triangle.size() == 0 || triangle.get(0).size() == 0)
@@ -126,6 +141,28 @@ public class DP {
             dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
         }
         return dp[r];
+    }
+
+    //279
+    public int numSquares(int n) {
+        //dp : a number can be added by up to 4 squares, guaranteed. So the possiblity is 1234.
+        //for each i, we need to look back for a one that add 1 to the i. dp[i] = Min(dp[i], dp[i-sqare]+1)
+        //for this type of problems, we should not for each i look back and loop again and again.
+        //instead we push forward from the beginning
+        //欲向后看,反从前导。
+
+        if (n < 1)
+            return 0;
+        int[] dp = new int[n+1]; //we make index and n match and more importantly, we need intial condition dp[0]=0
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+
+        for (int i = 0; i < n; ++i){
+            for (int j = 1; i + j*j <=n; ++j){
+                dp[i + j*j] = Math.min(dp[i+j*j], dp[i] + 1);
+            }
+        }
+        return dp[n];
     }
 
 

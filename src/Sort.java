@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zplchn on 6/26/16.
@@ -77,6 +75,57 @@ public class Sort {
             res.add(intervals.get(i++));
 
         return res;
+    }
+
+    //215
+    // 3 solutions : 1. sort the array and get kth onlogn 2. quickselect avg on, worst on2 3. heap onlogk
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length < k)
+            return 0;
+        return findKthSmallest(nums, nums.length - k, 0, nums.length - 1);
+    }
+
+    private int findKthSmallest(int[] nums, int k, int start, int end){
+        if (start >= end)
+            return nums[start];
+        int pos = partition(nums, start, end);
+        if (pos == k)
+            return nums[pos];
+        else if (pos < k)
+            return findKthSmallest(nums, k, pos + 1, end);
+        else
+            return findKthSmallest(nums, k, start, pos - 1);
+    }
+
+    private int partition(int[] nums, int start, int end){
+        int pivot = nums[end];
+        int l = start, r = end;//here r is the last since if the array is sorted 1,2,3 and r = 2 then l wouldnt be able to reach to the last
+        while (l < r){
+            while (l < r && nums[l] < pivot)
+                ++l;
+            while (l < r && nums[r] >= pivot)
+                --r;
+            swap(nums, l, r);
+        }
+        swap(nums, l, end); //get the pivot to the right positon in the final sorted array
+        return l;
+    }
+
+    private void swap(int[] nums, int l, int r){
+        int t = nums[l];
+        nums[l] = nums[r];
+        nums[r] = t;
+    }
+
+    private int findKthLargestMinHeap(int[] nums, int k){
+        //3. use min heap o(nlogk) space o(k)
+        Queue<Integer> pq = new PriorityQueue<Integer>(k); //minheap
+        for (int i : nums){
+            pq.offer(i);
+            if (pq.size() > k)
+                pq.poll();
+        }
+        return pq.peek();
     }
 
     //242

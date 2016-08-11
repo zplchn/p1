@@ -178,6 +178,30 @@ public class LinkedList {
         return smallHead.next;
     }
 
+    //92
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (head == null)
+            return head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        int c = n - m;
+        while (m-- > 1){
+            pre = pre.next;
+        }
+        ListNode left = pre, cur = pre.next, t;
+        pre = null;
+        while (c-- >= 0){
+            t = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = t;
+        }
+        left.next.next = cur;
+        left.next = pre;
+        return dummy.next;
+    }
+
     //138
     public RandomListNode copyRandomList(RandomListNode head) {
         if (head == null)

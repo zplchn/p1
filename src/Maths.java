@@ -189,6 +189,52 @@ public class Maths {
         return true;
     }
 
+    //223
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        //sum of two . no overlap,(top/btm/left/right) overlap
+        int sum = (G - E) * (H - F) + (C - A) * (D - B);
+        if (H < B || C < E || D < F || G < A)
+            return sum;
+        int right = Math.min(C, G);
+        int left = Math.max(A, E);
+        int top = Math.min(D, H);
+        int btm = Math.max(B, F);
+        return sum - (right - left) * (top - btm);
+    }
+
+
+    //258
+    /*
+    20的所有的树根：repeat every 9. so we need to mod 9 to get the digital root. when use natual number to mod, must -1 to make cover 0 case
+and becuase resulte is 1 based so add 1 in the end
+1    1
+2    2
+3    3
+4    4
+5    5
+6    6
+7    7
+8    8
+9    9
+10    1
+11    2
+12    3
+13    4
+14    5
+15    6
+16    7
+17    8
+18    9
+19    1
+20    2
+     */
+
+    public int addDigits(int num) {
+        if (num <= 0)
+            return 0;
+        return (num - 1) % 9 + 1;
+    }
+
     public static void main(String[] args){
         Maths m = new Maths();
         boolean b = m.isHappy(7);

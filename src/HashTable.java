@@ -212,6 +212,28 @@ public class HashTable {
         return min;
     }
 
+    //249
+    public List<List<String>> groupStrings(String[] strings) {
+        //use offset to create a map and group strings into this map. yx = 25 cuz for neg ones we +26 %26 == az
+        List<List<String>> res = new ArrayList<>();
+        if (strings == null || strings.length == 0)
+            return res;
+        Map<String, List<String>> hm = new HashMap<>();
+
+        for (String s : strings){
+            if (s == null || s.length() == 0)
+                continue;
+            String code = "";
+            for (char c : s.toCharArray()){ //need to do char math, better directly convert to char array
+                code += ((c - s.charAt(0) + 26) % 26 + ","); //offset1,offset2, offset3 ... as code and use as key
+            }
+            if (!hm.containsKey(code))
+                hm.put(code, new ArrayList<String>());
+            hm.get(code).add(s);
+        }
+        return new ArrayList<List<String>>(hm.values());
+    }
+
     //266
     public boolean canPermutePalindrome(String s) {
         if (s == null || s.length() == 0)

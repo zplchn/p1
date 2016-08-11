@@ -81,6 +81,18 @@ public class Bit {
         return res;
     }
 
+    //268
+    public int missingNumber(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return 0;
+        int res = 0;
+        for (int i = 0; i < nums.length; ++i)
+            res ^= nums[i] ^ (i+1);
+        return res;
+
+    }
+
+
 
 
 

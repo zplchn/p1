@@ -165,6 +165,34 @@ public class DFS {
         return root;
     }
 
+    //109
+    private ListNode head;
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null)
+            return null;
+        ListNode cur = head;
+        int len = 0;
+        while (cur != null){
+            cur = cur.next;
+            ++len;
+        }
+        this.head = head;
+        return sortedListToBSTHelper(0, len - 1);
+    }
+
+    private TreeNode sortedListToBSTHelper(int l, int r){ //cannot pass head here since reassgin value wont change head overall only content will
+        if (l > r)
+            return null;
+        int m = l + ((r - l) >> 1);
+        TreeNode lsub = sortedListToBSTHelper(l, m - 1);
+        TreeNode root = new TreeNode(this.head.val);
+        //head = head.next; java is pass by value only and here reassign value wont change head('s content)
+        this.head = head.next;
+        root.left = lsub;
+        root.right = sortedListToBSTHelper(m + 1, r);
+        return root;
+    }
+
     //110
     public boolean isBalanced(TreeNode root) {
         if (root == null)
@@ -337,6 +365,29 @@ public class DFS {
         return root;
     }
 
+    //230
+    //bst's inorder traversal is sorted, the kth is the kth in inorder traversal
+    private TreeNode kth;
+    private int index = 1;
+    public int kthSmallest(TreeNode root, int k) {
+        if (root == null)
+            return -1;
+        kthSmallestHelper(root, k);
+        return this.kth.val;
+    }
+
+    private void kthSmallestHelper(TreeNode root, int k){
+        if (root == null)
+            return;
+        if (kth == null)
+            kthSmallestHelper(root.left, k);
+        if (index++ == k){
+            kth = root;
+        }
+        if (kth == null)
+            kthSmallestHelper(root.right, k);
+    }
+
     //235
     public TreeNode lowestCommonAncestorBST(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null || p == null || q == null)
@@ -490,6 +541,27 @@ public class DFS {
         while (root.left != null)
             root = root.left;
         return root;
+    }
+
+    //294
+    public boolean canWin(String s) {
+        if (s == null || s.length() == 0)
+            return false;
+        return canWinHelper(s.toCharArray()); //need to do string munipulation, change to char[] is simpler
+    }
+    //try all possible ways and take turns, when inside loop it's the oppo takes as the player and needs to lose
+    //as long as there is a way to make the first player win. then we return true because we can follow this
+    private boolean canWinHelper(char[] s){
+        for (int i = 0; i < s.length - 1; ++i){
+            if (s[i] == '+' && s[i+1] == '+'){
+                s[i] = s[i+1] = '-';
+                boolean oppo = canWinHelper(s);
+                s[i] = s[i+1] = '+';
+                if (!oppo)
+                    return true;
+            }
+        }
+        return false;
     }
 
     //298
