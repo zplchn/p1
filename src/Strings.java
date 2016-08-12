@@ -1,7 +1,4 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zplchn on 7/9/16.
@@ -190,6 +187,50 @@ public class Strings {
                 return gap > 0 ? 1 : 0;
         }
         return 0;
+    }
+
+    //179
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return "";
+        String[] s = new String[nums.length];
+        for (int i = 0; i < s.length; ++i)
+            s[i] = Integer.toString(nums[i]);
+        Arrays.sort(s, (s1, s2) -> (s2 + s1).compareTo(s1 + s2)); //note java string needs to call compareTo
+        String res = "";
+        for (String str : s)
+            res += str;
+        while (res.length() > 1 && res.charAt(0) == '0') //deal with nums={0, 0, 0....
+            res = res.substring(1);
+        return res;
+
+    }
+
+    //186
+    public void reverseWords(char[] s) {
+        if (s == null || s.length <= 1)
+            return;
+        reverseWordsHelper(s, 0, s.length - 1);
+        int l = 0, r = 1;
+        while (r < s.length){
+            if (s[r] != ' ')
+                ++r;
+            else {
+                reverseWordsHelper(s, l, r - 1);
+                l = r = r + 1;
+            }
+        }
+        reverseWordsHelper(s, l, r - 1);
+    }
+
+    private void reverseWordsHelper(char[] s, int l, int r){
+        while (l < r){
+            char x = s[l];
+            s[l] = s[r];
+            s[r] = x;
+            ++l;
+            --r;
+        }
     }
 
     //293

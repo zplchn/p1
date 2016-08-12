@@ -53,6 +53,20 @@ public class Bit {
         return n > 0 && (n & (n-1)) == 0; // precedence : equality > bit > logical
     }
 
+    //201
+    public int rangeBitwiseAnd(int m, int n) {
+        //consecutive numbers starting from lower bit will always differ, 101 -> 110 - 111, 1000, the more we add,
+        //the lower bit will differ and differ but higher bit will tend to keep the same till reach to the high range.
+        //bit and once a 0 is a 0. so keep shifting m and n till they are the same
+        int shift = 0;
+        while (m != n){
+            m >>= 1;
+            n >>= 1;
+            ++shift;
+        }
+        return m << shift;
+    }
+
     //260
     public int[] singleNumberTwoSingleAllotherInPairs(int[] nums) {
         int[] res = {0, 0};
