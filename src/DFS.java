@@ -336,6 +336,34 @@ public class DFS {
         return res;
     }
 
+    //145
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null)
+            return res;
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode pre = null;
+        while (root != null || !stack.isEmpty()){
+            if (root != null){
+                stack.push(root);
+                root = root.left;
+            }
+            else {
+                //we dont know if the mid point need to the right child, or is returned from the right child. so we
+                //set the pre as the last one traversed and compare with the peek, when equal means coming back and pop
+                TreeNode tn = stack.peek();
+                if (tn.right != null && pre != tn.right)
+                    root = tn.right;
+                else {
+                    tn = stack.pop();
+                    res.add(tn.val);
+                    pre = tn;
+                }
+            }
+        }
+        return res;
+    }
+
     //156
     public TreeNode upsideDownBinaryTree(TreeNode root) {
         if (root == null)

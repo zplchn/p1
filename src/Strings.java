@@ -174,6 +174,45 @@ public class Strings {
         return true;
     }
 
+    //151
+    public String reverseWords(String s) {
+        if (s == null)
+            return s;
+        s = s.trim(); //s is possible all whitespace "      "
+        if (s.length() == 0)
+            return s;
+        String[] token = s.split("\\s"); // \\s will only match just one space, so "a  b" will split into "a", "b", ""-> the empty between the middle two spaces
+        //while \\s+ will match from 1 to as many as spaces grouped and will result in "a" "b" only
+        String res = token[token.length - 1];
+        for (int i = token.length - 2; i >= 0; --i)
+            res += (" " + token[i]);
+        return res;
+    }
+
+    //161
+    public boolean isOneEditDistance(String s, String t) {
+        //1. cannot be diff >= 2. 2. make s shorter or swap, then they cannot be same. or once they diff, shorter(or both) advance and all equal
+        if (s == null || t == null)
+            return false;
+        int diff = s.length() - t.length();
+        if (Math.abs(diff) > 1)
+            return false;
+        //make s shorter
+        if (diff > 0)
+            return isOneEditDistance(t, s);
+        //diff is 0 or -1
+        int i = 0;
+        while (i < s.length() && s.charAt(i) == t.charAt(i))
+            ++i;
+        if (i == s.length())
+            return diff == -1; //they must differ in len sinc eno content diff
+        if (diff == 0)
+            ++i;
+        while (i < s.length() && s.charAt(i) == t.charAt(i - diff))
+            ++i;
+        return i == s.length();
+    }
+
     //165
     public int compareVersion(String version1, String version2) {
         if (version1 == null || version2 == null)
@@ -266,7 +305,8 @@ public class Strings {
 
     public static void main(String[] args){
         Strings s = new Strings();
-        s.compareVersion("1", "0");
+        //s.compareVersion("1", "0");
+        s.reverseWords("   a  b ");
     }
 
 
