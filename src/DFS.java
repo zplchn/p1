@@ -278,7 +278,7 @@ public class DFS {
     }
 
     //116
-    public void connect(TreeLinkNode root) {
+    public void connectCompleteBT(TreeLinkNode root) {
         if (root == null)
             return;
         if (root.left != null)
@@ -287,6 +287,55 @@ public class DFS {
             root.right.next = root.next != null ? root.next.left : null;
         connect(root.left);
         connect(root.right);
+    }
+
+    //117
+    public void connect(TreeLinkNode root) {
+        /* preorder but right first then left. at each level find the next non-null/ null child to connect.
+            when no missing child, it's same as the complete tree's solution */
+        if (root == null)
+            return;
+        TreeLinkNode t = root.next;
+        while (t != null){
+            if (t.left != null){
+                t = t.left;
+                break;
+            }
+            else if (t.right != null){
+                t = t.right;
+                break;
+            }
+            else
+                t = t.next;
+        }
+
+        //connect child
+        if (root.right != null)
+            root.right.next = t;
+        if (root.left != null)
+            root.left.next = root.right != null?root.right : t;
+        //preorder
+        connect(root.right);
+        connect(root.left);
+    }
+
+    //124
+    private int maxPath;
+    public int maxPathSum(TreeNode root) {
+        if (root == null)
+            return 0;
+        maxPath = root.val;
+        maxPathSumHelper(root);
+        return maxPath;
+    }
+
+    private int maxPathSumHelper(TreeNode root){
+        if (root == null)
+            return 0;
+        int ln = Math.max(maxPathSumHelper(root.left), 0);
+        int rn = Math.max(maxPathSumHelper(root.right), 0);
+        maxPath = Math.max(maxPath, ln + rn + root.val);
+        return Math.max(ln, rn) + root.val;
     }
 
     //129

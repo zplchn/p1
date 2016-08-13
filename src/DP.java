@@ -1,10 +1,33 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zplchn on 7/11/16.
  */
 public class DP {
+    //5
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() == 0)
+            return s;
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        int max = 0, start = 0, end = 0;
+
+        for (int i = s.length() - 1; i >= 0; --i){
+            for (int j = i; j < s.length(); ++j){
+                if (s.charAt(i) == s.charAt(j) && (j - i <= 2 || dp[i+1][j-1])){
+                    dp[i][j] = true;
+                    if (j - i + 1 > max){
+                        max = j - i + 1;
+                        start = i; //here should take note rather then substring(full copy of substring even ultra long)
+                        end = j;
+                    }
+                }
+                //must to the end. cbbc. cb, cbb all false. cbbc true
+            }
+        }
+        return s.substring(start, end + 1);
+    }
 
    //53
    public int maxSubArray(int[] nums) {
@@ -80,6 +103,20 @@ public class DP {
         return dp[1];
     }
 
+    //96
+    public int numTrees(int n) {
+        if (n <= 0)
+            return 0;
+        int[] dp = new int[n + 1];
+        dp[0] = dp[1] = 1;
+        for (int i = 2; i <=n; ++i){
+            for (int j = 0; j < i; ++j){ //j is number of nodes on left child
+                dp[i] += dp[j] * dp[i - j - 1];
+            }
+        }
+        return dp[dp.length - 1];
+    }
+
     //120
     public int minimumTotal(List<List<Integer>> triangle) {
         if (triangle == null || triangle.size() == 0 || triangle.get(0).size() == 0)
@@ -90,6 +127,23 @@ public class DP {
             }
         }
         return triangle.get(0).get(0);
+    }
+
+    //139
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s == null || wordDict == null)
+            return false;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 0; i < s.length(); ++i){
+            if (!dp[i])
+                continue;
+            for (int j = i; j < s.length(); ++j){
+                if (wordDict.contains(s.substring(i, j + 1)))
+                    dp[j+1] = true;
+            }
+        }
+        return dp[dp.length - 1];
     }
 
     //152

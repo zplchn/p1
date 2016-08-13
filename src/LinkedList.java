@@ -117,6 +117,35 @@ public class LinkedList {
         return dummy.next;
     }
 
+    //61
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null)
+            return head;
+        //first get length of list
+        int n = 0;
+        ListNode cur = head, right;
+        while (cur != null){
+            cur = cur.next;
+            ++n;
+        }
+        k %= n;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        cur = right = dummy;
+        while (k-- > 0){
+            right = right.next;
+        }
+        while (right != null && right.next != null){
+            cur = cur.next;
+            right = right.next;
+        }
+        right.next = head;
+        dummy.next = cur.next;
+        cur.next = null;
+        return dummy.next;
+
+    }
+
     //82
     public ListNode deleteDuplicatesDeleteDupItself(ListNode head) {
         if(head == null)
