@@ -22,6 +22,25 @@ public class HashTable {
         return res;
     }
 
+    //3
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0)
+            return 0;
+        int max = 0, l = 0;
+        Map<Character, Integer> hm = new HashMap<>();
+        for (int i = 0; i < s.length(); ++i){
+            char c = s.charAt(i);
+            if (hm.containsKey(c) && hm.get(c) >= l){
+                max = Math.max(max, i - l);
+                l = hm.get(c) + 1;
+            }
+            hm.put(c, i);
+        }
+        //need to handle if no dup case/last one
+        max = Math.max(max, s.length() - l);
+        return max;
+    }
+
     //36
     public boolean isValidSudoku(char[][] board) {
         if (board == null || board.length != 9 || board[0].length != 9)
@@ -307,8 +326,11 @@ public class HashTable {
 
     public static void main(String[] args){
         HashTable ht = new HashTable();
-        boolean b = ht.wordPattern("abba", "dog cat cat dog");
-        System.out.print(b);
+        //boolean b = ht.wordPattern("abba", "dog cat cat dog");
+        //System.out.print(b);
+
+        String s = "abcabcbb";
+        ht.lengthOfLongestSubstring(s);
 
 
 

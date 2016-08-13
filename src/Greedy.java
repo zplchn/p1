@@ -2,6 +2,29 @@
  * Created by zplchn on 8/7/16.
  */
 public class Greedy {
+
+    //42
+    public int trap(int[] height) {
+        if (height == null || height.length<=2)
+            return 0;
+        int l = 0, r = height.length - 1, res = 0;
+        while (l < r){
+            int min = Math.min(height[l], height[r]);
+            if (height[l] == min){
+                ++l;
+                while (l < r && height[l] <= min)
+                    res += min - height[l++];
+            }
+            else {
+                --r;
+                while (l < r && height[r] <= min)
+                    res += min - height[r--];
+            }
+        }
+        return res;
+    }
+
+
     //134
     /*
     1. we start from s and each step we accumulate gas[i] - cost[i], if at point p we r negative and cannot move forward.

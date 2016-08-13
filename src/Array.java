@@ -9,6 +9,35 @@ import java.util.List;
 
 public class Array {
 
+    //54
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return res;
+        int m = matrix.length, n = matrix[0].length, lvl = (Math.min(m, n) >> 1);
+        for (int l = 0; l < lvl; ++l){
+            for (int j = l; j < matrix[0].length -l -1; ++j) //every direction leave the last one as the next direction start
+                res.add(matrix[l][j]);
+            for (int i = l; i < matrix.length -l -1; ++i)
+                res.add(matrix[i][matrix[0].length - l - 1]);
+            for (int j = matrix[0].length - l - 1; j > l; --j)
+                res.add(matrix[matrix.length -l-1][j]);
+            for (int i = matrix.length -l -1; i > l; --i)
+                res.add(matrix[i][l]);
+        }
+        if (Math.min(m, n) % 2 == 1) {//note here is not lvl, when m=n=1
+            if (m < n) {
+                for (int j = lvl; j < matrix[0].length - lvl; ++j)
+                    res.add(matrix[lvl][j]);
+            }
+            else { //this else cover an important case, when m=n=1 [[1]]. this will only be added here
+                for (int i = lvl; i < matrix.length - lvl; ++i)
+                    res.add(matrix[i][lvl]);
+            }
+        }
+        return res;
+    }
+
     //73
     public void setZeroes(int[][] matrix) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
