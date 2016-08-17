@@ -4,6 +4,22 @@ import java.util.*;
  * Created by zplchn on 7/9/16.
  */
 public class Strings {
+    //6
+    public String convert(String s, int numRows) {
+        if (s == null || s.length() == 0 || numRows <= 1)
+            return s;
+        StringBuilder sb = new StringBuilder();
+        int zigsize = 2*numRows - 2; //without first and last row
+        //output by row
+        for (int i = 0; i < numRows; ++i){
+            for (int j = i; j < s.length(); j += zigsize){
+                sb.append(s.charAt(j));
+                if (i != 0 && i != numRows -1 && j + zigsize - 2*i < s.length())
+                    sb.append(s.charAt(j+zigsize-2*i));
+            }
+        }
+        return sb.toString();
+    }
 
     //8
     public int myAtoi(String str) {
@@ -201,6 +217,25 @@ public class Strings {
         for (int i = token.length - 2; i >= 0; --i)
             res += (" " + token[i]);
         return res;
+    }
+
+    //157
+    private int read4(char[] buf){
+        return 0;
+    }
+    public int read(char[] buf, int n) {
+        char[] buffer = new char[4];
+        int offset = 0;
+        while (n > 0){
+            int act = Math.min(read4(buffer), n);
+            System.arraycopy(buffer, 0, buf, offset, act);
+            offset += act;
+            n -= act;
+            if (act < 4)
+                break;
+
+        }
+        return offset;
     }
 
     //161

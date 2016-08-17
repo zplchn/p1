@@ -231,6 +231,38 @@ public class HashTable {
         return min;
     }
 
+    //246
+    public boolean isStrobogrammatic(String num) {
+        if (num == null || num.length() == 0)
+            return true;
+        /*StringBuilder sb = new StringBuilder(num).reverse();
+        for (int i = 0; i < sb.length();++i) {
+            if ("01689".indexOf(sb.charAt(i)) < 0) //string contain char needs using indexOf. contains use subtring
+                return false;
+            else if (sb.charAt(i) == '6')
+                sb.replace(i, i + 1, "9"); //replace is (start,end,string)
+            else if (sb.charAt(i) == '9')
+                sb.replace(i, i + 1, "6");
+        }
+        return sb.toString().equals(num);*/
+
+        //or use hashmap and two pointers
+        Map<Character, Character> hm = new HashMap<>();
+        hm.put('0', '0');
+        hm.put('1', '1');
+        hm.put('6', '9');
+        hm.put('8', '8');
+        hm.put('9', '6');
+        int l = 0, r = num.length() - 1;
+        while (l <= r) { //when only one
+            if (!hm.containsKey(num.charAt(r)) || hm.get(num.charAt(r)) != num.charAt(l))
+                return false;
+            ++l;
+            --r;
+        }
+        return true;
+    }
+
     //249
     public List<List<String>> groupStrings(String[] strings) {
         //use offset to create a map and group strings into this map. yx = 25 cuz for neg ones we +26 %26 == az

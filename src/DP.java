@@ -129,6 +129,35 @@ public class DP {
         return triangle.get(0).get(0);
     }
 
+    //132
+    public int minCut(String s) {
+        if (s == null || s.length() == 0)
+            return 0;
+        boolean[][] parti = getPartition(s);
+        int[] dp = new int[s.length() + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int i = 0; i < s.length(); ++i){
+            for (int j = i; j < s.length(); ++j){
+                if (parti[i][j]){
+                    dp[j+1] = Math.min(dp[j+1], dp[i]+1);
+                }
+            }
+        }
+        return dp[dp.length - 1] - 1;
+    }
+
+    private boolean[][] getPartition(String s){
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int i = s.length() - 1; i >= 0; --i){
+            for (int j = i; j < s.length(); ++j){
+                if (s.charAt(i) == s.charAt(j) && (j - i <= 2 || dp[i+1][j-1]))
+                    dp[i][j] = true;
+            }
+        }
+        return dp;
+    }
+
     //139
     public boolean wordBreak(String s, Set<String> wordDict) {
         if (s == null || wordDict == null)
@@ -195,6 +224,19 @@ public class DP {
             dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
         }
         return dp[r];
+    }
+
+    //256
+    public int minCost(int[][] costs) {
+        if (costs == null || costs.length == 0 || costs[0].length == 0)
+            return 0;
+        //dp[i][j] = costs[i][j] + min(dp[i-1][(j+1)%3],dp[i-1][(j+2)%3]) the cost of i,j is costs at i,j + min of the other two in last step
+        int[][] dp = new int[costs.length+1][costs[0].length];
+        for (int i = 1; i < dp.length; ++i){
+            for(int j = 0; j < dp[0].length; ++j)
+                dp[i][j] = costs[i-1][j]+Math.min(dp[i-1][(j+1)%3], dp[i-1][(j+2)%3]);
+        }
+        return Math.min(dp[dp.length-1][0], Math.min(dp[dp.length - 1][1],dp[dp.length - 1][2]));
     }
 
     //279

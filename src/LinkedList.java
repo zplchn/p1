@@ -117,6 +117,36 @@ public class LinkedList {
         return dummy.next;
     }
 
+    //25
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k <= 1)
+            return head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur = head, pre = dummy, left = dummy;
+        while(cur != null){
+            int i = 0;
+            ListNode t = cur;
+            while (i < k && t != null){
+                t =t.next;
+                ++i;
+            }
+            if (i < k)
+                break;
+            while (cur!=t){
+                ListNode next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
+            }
+            ListNode tt = left.next;
+            left.next.next = cur;
+            left.next = pre;
+            left = tt;
+        }
+        return dummy.next;
+    }
+
     //61
     public ListNode rotateRight(ListNode head, int k) {
         if (head == null)

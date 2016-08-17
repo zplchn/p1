@@ -5,6 +5,12 @@ import java.util.*;
  */
 public class DFS {
 
+    //60
+    public String getPermutation(int n, int k) {
+
+
+    }
+
     //79
     public boolean exist(char[][] board, String word) {
         if (board == null || word == null)
@@ -87,6 +93,39 @@ public class DFS {
                 root = stack.pop();
                 res.add(root.val);
                 root = root.right;
+            }
+        }
+        return res;
+    }
+
+    //95
+    public List<TreeNode> generateTrees(int n) {
+        //this combines binary serach + postorder. split at any node and then define left set and right set
+        //the only difference is not a "binary search but loop through all available candidates
+        //then postorder to connect back. For sorted arrays, this divide and conquer/binary search should be remembered!
+        if (n < 1)
+            return new ArrayList<TreeNode>();
+        return generateTreesHelper(1, n);
+    }
+
+    private List<TreeNode> generateTreesHelper(int left, int right){
+        List<TreeNode> res = new ArrayList<>();
+        if (left > right){
+            res.add(null);
+            return res;
+        }
+        //pick everyone as root and divide and conquer. then connect as postorder
+        for (int i = left; i <= right; ++i){
+            List<TreeNode> lchild = generateTreesHelper(left, i-1);
+            List<TreeNode> rchild = generateTreesHelper(i+1, right);
+
+            for (TreeNode tnleft : lchild){
+                for (TreeNode tnright : rchild){
+                    TreeNode root = new TreeNode(i);
+                    root.left = tnleft;
+                    root.right = tnright;
+                    res.add(root);
+                }
             }
         }
         return res;
@@ -358,11 +397,39 @@ public class DFS {
         sumNumbersHelper(root.right, pre);
     }
 
-    public static void main(String[] args){
-        String s = "010010";
-        //System.out.println(s.substring(1, 6));
-        DFS dfs = new DFS();
-        dfs.restoreIpAddresses(s).forEach(System.out::println);
+    //131
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        if (s == null || s.length() == 0)
+            return res;
+        boolean[][] parti = getPartitions(s);
+        partitionHelper(s, parti, 0, new ArrayList<String>(),res);
+        return res;
+    }
+
+    private boolean[][] getPartitions(String s){
+        boolean [][] dp =new boolean[s.length()][s.length()];
+        for (int i = s.length()-1; i>=0; --i){
+            for (int j = i; j < s.length(); ++j){
+                if (s.charAt(i) == s.charAt(j) && (j - i <= 2 || dp[i+1][j-1]))
+                    dp[i][j] = true;
+            }
+        }
+        return dp;
+    }
+
+    private void partitionHelper(String s, boolean[][] parti, int k, List<String> combi, List<List<String>> res){
+        if (k == s.length()){
+            res.add(new ArrayList<String>(combi));
+            return;
+        }
+        for (int i = k; i < s.length(); ++i){
+            if (parti[k][i]){
+                combi.add(s.substring(k,i+1));
+                partitionHelper(s, parti, i+1, combi, res);
+                combi.remove(combi.size()-1);
+            }
+        }
     }
 
     //144
@@ -428,6 +495,39 @@ public class DFS {
         root.right = parent;
 
         return new_root == null ? root : new_root;
+    }
+
+    //222
+    public int countNodes(TreeNode root) {
+        // complete tree - the last lvl are left filled. full complete tree(no missing nodes) have total 2^h - 1 nodes o(h^2)
+        if (root == null)
+            return 0;
+        int lheight = getLeft(root.left);
+        int rheight = getRight(root.right);
+
+        if (lheight == rheight)
+            return (2<<lheight) -1;
+        else
+            return countNodes(root.left) + countNodes(root.right) +1;
+    }
+
+
+    private int getLeft(TreeNode t) {
+        int cnt = 0;
+        while (t != null){
+            t = t.left;
+            ++cnt;
+        }
+        return cnt;
+    }
+
+    private int getRight(TreeNode t) {
+        int cnt = 0;
+        while (t != null){
+            t = t.right;
+            ++cnt;
+        }
+        return cnt;
     }
 
     //226
@@ -659,6 +759,13 @@ public class DFS {
             k = 1;
         longestConsecutiveHelper(root.left, root, k);
         longestConsecutiveHelper(root.right, root, k);
+    }
+
+    public static void main(String[] args){
+        String s = "010010";
+        //System.out.println(s.substring(1, 6));
+        DFS dfs = new DFS();
+        dfs.restoreIpAddresses(s).forEach(System.out::println);
     }
 
 

@@ -38,6 +38,29 @@ public class Array {
         return res;
     }
 
+    //59
+    public int[][] generateMatrix(int n) {
+        if (n < 0)
+            return null;
+        int[][] res = new int[n][n];
+        int c = 1;
+        for (int l = 0; l < n/2; ++l){
+            for (int j = l; j < n-l-1; ++j)
+                res[l][j] = c++;
+            for (int i = l; i < n-l-1; ++i)
+                res[i][n-l-1] = c++;
+            for(int j = n-1-l; j> l; --j)
+                res[n-1-l][j] = c++;
+            for(int i = n-1-l; i > l; --i)
+                res[i][l] = c++;
+        }
+        //need to take care of heart
+        if (n%2==1)
+            res[n/2][n/2] = c;
+        return res;
+
+    }
+
     //73
     public void setZeroes(int[][] matrix) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0)

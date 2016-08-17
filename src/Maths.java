@@ -225,6 +225,30 @@ public class Maths {
         return sum - (right - left) * (top - btm);
     }
 
+    //239
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        //3120 and k = 3 use queue to store at most k elements in the window.
+        // however only store within window the elements less or equal then peek.peek always the biggest in the window
+        //note, new number should keep kicking out ones in queue's tail that are smaller. in this way, the queue is always descending!
+        if (nums == null || nums.length == 0 || k < 1)
+            return nums;
+        Deque<Integer> queue = new ArrayDeque<>();
+        int[] res = new int[nums.length -k +1];
+
+        for (int i = 0, j = 0; i < nums.length; ++i){
+            while (!queue.isEmpty() && queue.peekLast() < nums[i])
+                queue.pollLast();
+            queue.offer(nums[i]);
+
+            if (i >= k-1) {
+                res[j++] = queue.peek();
+                if (nums[i - k + 1] == queue.peekFirst())
+                    queue.pollFirst();
+            }
+        }
+        return res;
+    }
+
 
     //258
     /*
