@@ -103,6 +103,31 @@ public class Strings {
         return -1;
     }
 
+    //32
+    public int longestValidParentheses(String s) {
+        //maintain a stack to store left ('s index, and a start. whenever a right ), if stack is empty, move start
+        //otherwise, ( (())() if stack not empty, i - peek. if empty, i - start
+
+        if (s == null || s.length() == 0)
+            return 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int res = 0, start = 0;
+
+        for (int i = 0; i < s.length(); ++i){
+            if (s.charAt(i) == '(')
+                stack.push(i);
+            else {
+                if (stack.isEmpty())
+                    start = i+1;
+                else {
+                    stack.pop();
+                    res = Math.max(res, stack.isEmpty() ? i - start + 1 : i - stack.peek());
+                }
+            }
+        }
+        return res;
+    }
+
     //38
     public String countAndSay(int n) {
         if (n < 1)
@@ -182,6 +207,29 @@ public class Strings {
             return "/";
         while (!deque.isEmpty()){
             res += ("/" + deque.pollLast()); //deque when use as stack alsays push/pop at head. Need to pollLast() when queue
+        }
+        return res;
+    }
+
+    //84
+    public int largestRectangleArea(int[] heights) {
+        //the biggest histogram - firstly we can think for every h[i] expand to left and right, find banks(lower than h[i))
+        //then the biggest histogram for i is width * h[i]  this is o(n^2)
+        // now we want a o(n). key is to use a stack which only add increasing h[i]. when current h[i] < peek, we know
+        // current i is the right bank, and pop. since is increasing, now the peek is the left bank. and all between peek and current
+        // is large or equal than the pop
+        if (heights == null || heights.length == 0)
+            return 0;
+        int res = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (int i = 0; i <= heights.length; ++i){
+            int height_cur = i == heights.length? -1 : heights[i];
+            //right bank
+            while (!stack.isEmpty() && heights[stack.peek()] > height_cur){
+                res = Math.max(res, heights[stack.pop()] * (stack.isEmpty() ? i :(i - stack.peek() - 1))); //left bank
+            }
+            stack.push(i);
         }
         return res;
     }
