@@ -9,6 +9,38 @@ import java.util.List;
 
 public class Array {
 
+    //31
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length <= 1)
+            return;
+        int r = nums.length - 1;
+        while (r > 0 && nums[r] <= nums[r-1])
+            --r;
+        if (r == 0) {
+            reverse(nums, 0, nums.length - 1);
+            return;
+        }
+        //need to find from right the next big one of r - 1
+        int t = nums.length - 1;
+        while (nums[t] <= nums[r-1])
+            --t;
+
+        swap(nums, r - 1, t);
+        reverse(nums, r, nums.length - 1);
+    }
+
+    private void swap(int[] nums, int l, int r){
+        int t = nums[l];
+        nums[l] = nums[r];
+        nums[r] = t;
+    }
+
+    private void reverse(int[] nums, int l, int r){
+        while (l < r){
+            swap(nums, l++, r--);
+        }
+    }
+
     //54
     public List<Integer> spiralOrder(int[][] matrix) {
         List<Integer> res = new ArrayList<>();
@@ -326,6 +358,50 @@ public class Array {
         return min;
     }
 
+    //289
+    public void gameOfLife(int[][] board) {
+        //inplace --> must sweep twice. and encoding for the first pass
+        /*
+        0 : dead -> dead
+        1 : live -> live
+        -- change
+        2: live -> dead 1&& (<2 || >3)
+        3: dead -> live 0&& (3)
+        then sweep again %2
+         */
+        if (board == null || board.length == 0 || board[0].length == 0)
+            return;
+        int[] offx = {-1, -1, -1,  0,  0,  1, 1, 1};
+        int[] offy = {-1,  0,  1, -1,  1, -1, 0, 1};
+
+        for (int i = 0; i < board.length; ++i){
+            for (int j = 0; j < board[0].length; ++j){
+                int cnt = 0;
+
+                for (int k = 0; k < offx.length; ++k){
+                    int x = i + offx[k];
+                    int y = j + offy[k];
+                    if (x >= 0 && x < board.length && y >= 0 && y < board[0].length)
+                        cnt += (board[x][y] == 1 || board[x][y] == 2) ? 1 : 0; //note here need to count the state before change
+                }
+
+                if (board[i][j] ==1 && (cnt < 2 || cnt > 3))
+                    board[i][j] = 2;
+                else if (board[i][j] == 0 && cnt == 3)
+                    board[i][j] = 3;
+            }
+        }
+        for (int i = 0; i < board.length; ++i)
+            for (int j = 0; j < board[0].length; ++j)
+                board[i][j] %= 2;
+    }
+
+
+    public static void main(String[] args){
+        Array aa = new Array();
+        int[][] t = {{1,1}};
+        aa.gameOfLife(t);
+    }
 
 
 

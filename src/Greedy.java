@@ -25,6 +25,8 @@ public class Greedy {
     }
 
 
+
+
     //134
     /*
     1. we start from s and each step we accumulate gas[i] - cost[i], if at point p we r negative and cannot move forward.

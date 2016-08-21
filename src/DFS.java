@@ -7,7 +7,7 @@ public class DFS {
 
     //60
     public String getPermutation(int n, int k) {
-
+return "";
 
     }
 
