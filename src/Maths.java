@@ -282,6 +282,35 @@ and becuase resulte is 1 based so add 1 in the end
         return (num - 1) % 9 + 1;
     }
 
+    //296
+    public int minTotalDistance(int[][] grid) {
+        //since it's manhattan distance, can break into two-dimension, regardless how to walk will be the best point in each dimension
+        // x1    x2 p x3  (x4) if odd, disc = (x1, x3) if even disc = (x1, x4) + (x2, x3) so always the middle point will be best
+        if (grid == null || grid.length == 0 || grid[0].length == 0)
+            return 0;
+        //to find middle point, need to cache both 2-d's 1s and sort in ascending order
+        List<Integer> r = new ArrayList<>();
+        List<Integer> c = new ArrayList<>();
+
+        for (int i = 0; i < grid.length; ++i){
+            for (int j = 0; j < grid[0].length; ++j){
+                if (grid[i][j] == 1){
+                    r.add(i);
+                    c.add(j);
+                }
+            }
+        }
+        //here i is already sorted, j not
+        Collections.sort(c);
+        int res = 0;
+        for (Integer i : r)
+            res += Math.abs(i - r.get(r.size() / 2)); //calculate dist to middle point
+        for (Integer i : c)
+            res += Math.abs(i - c.get(c.size() / 2)); //calculate dist to middle point
+        return res;
+
+    }
+
     public static void main(String[] args){
         Maths m = new Maths();
         boolean b = m.isHappy(7);

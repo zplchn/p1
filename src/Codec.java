@@ -1,12 +1,13 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zplchn on 8/20/16.
  */
 
-//271
+
 public class Codec {
+
+    /* 271 */
     // Encodes a list of strings to a single string.
     public String encode(List<String> strs) {
         // use len + # to encode
@@ -34,5 +35,57 @@ public class Codec {
             start = i + len + 1;
         }
         return res;
+    }
+
+    /* END 271 */
+
+    /* 297 */
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeHelper(root, sb);
+        return sb.toString();
+    }
+
+    private void serializeHelper(TreeNode root, StringBuilder sb){
+        if (root == null){
+            sb.append("#,");
+            return;
+        }
+        sb.append(root.val);
+        sb.append(',');
+        serializeHelper(root.left, sb);
+        serializeHelper(root.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data == null || data.length() == 0)
+            return null;
+        Deque<String> t = new ArrayDeque<>(Arrays.asList(data.split(",")));//deque is much faster than list.remove(0) ->copy every time
+        return deserializeHelper(t);
+    }
+
+    private TreeNode deserializeHelper(Deque<String> t){
+        if (t.isEmpty()){
+            return null;
+        }
+        String s = t.poll();
+        if (s.equals("#")){
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(s));
+        root.left = deserializeHelper(t);
+        root.right = deserializeHelper(t);
+        return root;
+    }
+
+
+    /* END 297 */
+    public static void main(String[] args){
+        String s = ",a,";
+        String[] ss = s.split(",");
+        System.out.println();
     }
 }

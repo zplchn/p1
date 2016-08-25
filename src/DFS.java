@@ -625,6 +625,35 @@ return "";
         return false;
     }
 
+    //254
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (n < 4)
+            return res;
+        getFactorsHelper(n, 2, res, new ArrayList<Integer>());
+        return res;
+    }
+
+    private void getFactorsHelper(int n, int start, List<List<Integer>> res, List<Integer> combi){
+        if (n == 1){
+            if (combi.size() >= 2) //make sure not pair with 1
+                res.add(new ArrayList<>(combi));
+            return;
+        }
+        for (int i = start; i <= (int)Math.sqrt(n); ++i){ //only ascending order
+            if (n % i == 0){
+                combi.add(i);
+                getFactorsHelper(n/i, i, res, combi);
+                combi.remove(combi.size() - 1);
+            }
+        }
+        //6 2 -> 3 need to include the n itself when not pairing with 1
+
+        combi.add(n);
+        getFactorsHelper(1, n, res, combi);
+        combi.remove(combi.size()-1);
+    }
+
     //255
     public boolean verifyPreorder(int[] preorder) {
         if (preorder == null || preorder.length == 0)

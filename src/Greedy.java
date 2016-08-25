@@ -24,8 +24,17 @@ public class Greedy {
         return res;
     }
 
-
-
+    //122
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2)
+            return 0;
+        int res = 0,delta = 0;
+        for (int i = 1; i < prices.length; ++i) {
+            delta = prices[i] - prices[i - 1];
+            res += delta > 0 ? delta : 0;
+        }
+        return res;
+    }
 
     //134
     /*
@@ -50,15 +59,27 @@ public class Greedy {
         return total >= 0 ? start : -1;
     }
 
-    //122
-    public int maxProfit(int[] prices) {
-        if (prices == null || prices.length < 2)
+    //135
+    public int candy(int[] ratings) {
+        if (ratings == null || ratings.length == 0)
             return 0;
-        int res = 0,delta = 0;
-        for (int i = 1; i < prices.length; ++i) {
-            delta = prices[i] - prices[i - 1];
-            res += delta > 0 ? delta : 0;
+        int[] res = new int[ratings.length];
+        int cnt = 0;
+        res[0] = 1;
+        for (int i = 1; i < ratings.length; ++i){
+            if (ratings[i] > ratings[i-1])
+                res[i] = res[i-1] + 1;
+            else
+                res[i] = 1;
         }
-        return res;
+        cnt = res[res.length - 1];
+        for (int i = ratings.length - 2; i >= 0; --i){
+            if (ratings[i] > ratings[i+1] && res[i] <= res[i+1])
+                res[i] = res[i+1] + 1;
+            cnt += res[i];
+        }
+        return cnt;
     }
+
+
 }

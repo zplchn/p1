@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by zplchn on 7/11/16.
@@ -139,6 +137,48 @@ public class DP {
         }
         return dp[dp.length - 1][dp[0].length - 1];
     }
+
+    //85
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        //divide this to subproblem largest rectangle in histogram, with each row, and height as histogram
+        //need to cache the height
+        int[] height = new int[matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; ++i){
+            for (int j = 0; j < matrix[0].length; ++j){
+                height[j] = matrix[i][j] == '0'? 0 : height[j] + 1;
+            }
+            max = Math.max(max, maximalRectangleHelper(height)); //now convert to calculate largest rectangel histogram
+        }
+        return max;
+    }
+
+    private int maximalRectangleHelper(int[] height){
+        //use stack to store increasing height, and pop and use i as right bank, peek() as left bank to calculate size
+        Deque<Integer> stack = new ArrayDeque<>();
+        int max = 0;
+        for (int i = 0; i <= height.length; ++i){
+            int cur = i < height.length? height[i] : -1;
+            while (!stack.isEmpty() && height[stack.peek()] > cur){
+                max = Math.max(max, height[stack.pop()] * (stack.isEmpty()? i: (i - stack.peek() -1)));
+            }
+            stack.push(i);
+        }
+        return max;
+    }
+
+    public static void main (String[] args){
+        char[][] t = {{'1', '0', '1','0','0'},
+            {'1','0','1','1','1'},
+            {'1','1','1','1','1'},
+            {'1','0','0','1','0'}};
+        DP dp = new DP();
+        dp.maximalRectangle(t);
+    }
+
+
 
     //96
     public int numTrees(int n) {
@@ -330,6 +370,11 @@ public class DP {
             }
         }
         return dp[n];
+    }
+
+    //292
+    public boolean canWinNim(int n) {
+        return n % 4 != 0;
     }
 
 
